@@ -22,8 +22,18 @@ device_ids = [0]
 
 # hyper parameter
 temporal = 5
-train_data_dir = 'dhp_lstm/train/'
-train_label_dir = 'dhp_lstm/train/'
+dataN = 3
+if dataN == 1:
+    train_data_dir = '../data/train_one/'
+    train_label_dir = '../data/train_one/'
+
+if dataN == 2:
+    train_data_dir = '../data/train/'
+    train_label_dir = '../data/train/'
+
+if dataN == 3:
+    train_data_dir = '../data/train_action/'
+    train_label_dir = '../data/train_action/'
 
 learning_rate = 8e-6
 batch_size = 1
@@ -45,8 +55,8 @@ print('Train dataset total number of images sequence is ----' + str(len(train_da
 train_dataset = DataLoader(train_data, batch_size=batch_size, shuffle=False)
 
 net = get_pose_net()
-gpus = [int(i) for i in '0'.split(',')]
-model = torch.nn.DataParallel(net, device_ids=gpus).cuda()
+#gpus = [int(i) for i in '2'.split(',')]
+model = torch.nn.DataParallel(net, device_ids=[0]).cuda()
 
 def train():
     criterion = JointsMSELoss(

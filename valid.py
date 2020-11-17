@@ -23,14 +23,18 @@ device_ids = [0]
 
 # hyper parameter
 temporal = 5
-# train_data_dir = 'dhp_lstm/one/'
-# train_label_dir = 'dhp_lstm/one/'
+dataN = 3
+if dataN == 1:
+    train_data_dir = '../data/test_one/'
+    train_label_dir = '../data/test_one/'
 
-# train_data_dir = 'dhp_lstm/train/'
-# train_label_dir = 'dhp_lstm/train/'
+if dataN == 2:
+    train_data_dir = '../data/test/'
+    train_label_dir = '../data/test/'
 
-train_data_dir = 'dhp_lstm/test/'
-train_label_dir = 'dhp_lstm/test/'
+if dataN == 3:
+    train_data_dir = '../data/test_action/'
+    train_label_dir = '../data/test_action/'
 
 learning_rate = 8e-6
 batch_size = 1
@@ -138,7 +142,7 @@ def train():
                         preds = np.array(preds)
                         for j in range(13):
                             res += math.fabs(joint[i][j][0] - preds[i][j][0]) + math.fabs(joint[i][j][1] - preds[i][j][1])
-                        plot_2d(data_numpy[i], joint[i], preds[i])
+                        #plot_2d(data_numpy[i], joint[i], preds[i])
                     # print(res//(13))
                     res_totle += res
 
