@@ -417,7 +417,7 @@ class JointsMSELoss(nn.Module):
         self.use_target_weight = use_target_weight
 
     def forward(self, outputs, targets):
-        for i in range(5):
+        for i in range(config.temporal):
             output = outputs[i]
             target = targets[:,i]
             batch_size = output.size(0)

@@ -10,15 +10,16 @@ import copy
 import matplotlib
 from PIL import Image
 import matplotlib.pyplot as plt
-
+import config
 matplotlib.use('TKAgg')
 import scipy.misc
+from config import config
 
 class Dhp19PoseDataset(Dataset):
     def __init__(self, data_dir, label_dir, train, temporal=5, joints=13, transform=None, sigma=1):
         self.seqs = os.listdir(data_dir)
         self.data_dir = data_dir
-        self.temporal = 5
+        self.temporal = config.temporal
         self.temporal_dir = []
         self.labels = []
         self.label_dir = label_dir
@@ -75,7 +76,7 @@ class Dhp19PoseDataset(Dataset):
             #         self.temporal_dir.append(tmp1)
             #         self.labels.append(tmp2)
             # else:
-            for i in range(img_num//5):
+            for i in range(img_num//self.temporal):
                 tmp1 = []
                 tmp2 = []
                 for k in range(self.temporal * i, self.temporal * (i + 1)):

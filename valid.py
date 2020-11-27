@@ -19,11 +19,12 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 import numpy as np
 import math
+from config import config
 device_ids = [0]
 
 # hyper parameter
-temporal = 5
-dataN = 3
+# temporal = 5
+dataN = 1
 if dataN == 1:
     train_data_dir = '../data/test_one/'
     train_label_dir = '../data/test_one/'
@@ -49,7 +50,7 @@ if not os.path.exists(save_dir):
 transform = transforms.Compose([transforms.ToTensor()])
 
 # Build dataset
-train_data = Dhp19PoseDataset(data_dir=train_data_dir, label_dir=train_label_dir, temporal=temporal, train=False)
+train_data = Dhp19PoseDataset(data_dir=train_data_dir, label_dir=train_label_dir, temporal=config.temporal, train=False)
 print('Train dataset total number of images sequence is ----' + str(len(train_data)))
 
 # Data Loader
@@ -89,10 +90,11 @@ def plot_2d(dvs_frame, joint, pre):
     plt.plot(joint[:, 0], joint[:, 1], '.', c='red', label='gt')
     plt.plot(pre[:, 0], pre[:, 1], '.', c='blue', label='gt')
     plt.show()
-    plt.pause(0.0002)
+    plt.pause(0)
 
 plt.ion()
-list = [5,10,15,20,25,30,35,40,45,50]
+list = [50]
+# list = [5,10,15,20,25,30,35,40,45,50]
 def train():
     criterion = JointsMSELoss(
         use_target_weight=config.LOSS.USE_TARGET_WEIGHT
@@ -121,7 +123,7 @@ def train():
                 targets = targets.cuda()
                 loss = criterion(outputs, targets)
                 losses.update(loss.item(), inputs.size(0))
-                for j in range(5):
+                for j in range(config.temporal):
                     out = outputs[j]
                     tar = targets[:, j]
                     joint = joints[:, j]
@@ -142,7 +144,7 @@ def train():
                         preds = np.array(preds)
                         for j in range(13):
                             res += math.fabs(joint[i][j][0] - preds[i][j][0]) + math.fabs(joint[i][j][1] - preds[i][j][1])
-                        #plot_2d(data_numpy[i], joint[i], preds[i])
+                        plot_2d(data_numpy[i], joint[i], preds[i])
                     # print(res//(13))
                     res_totle += res
 

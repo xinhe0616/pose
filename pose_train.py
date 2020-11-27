@@ -17,12 +17,12 @@ from torch.optim.lr_scheduler import StepLR
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from torchvision import transforms
-
+from config import config
 device_ids = [0]
 
 # hyper parameter
-temporal = 5
-dataN = 3
+temporal = config.temporal
+dataN = 1
 if dataN == 1:
     train_data_dir = '../data/train_one/'
     train_label_dir = '../data/train_one/'
@@ -82,7 +82,7 @@ def train():
             loss.backward()
             optimizer.step()
             losses.update(loss.item(), inputs.size(0))
-            for j in range(5):
+            for j in range(temporal):
                 out = outputs[j]
                 tar = targets[:, j]
                 _, avg_acc, cnt, pred = accuracy(out.detach().cpu().numpy(),
